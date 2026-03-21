@@ -54,8 +54,8 @@
   "license": "Community",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BALKANGraph/OrgChartJS.git"
+    "url": "git+https://github.com/BALKANGraph/OrgChartJS-Community.git"
   },
   "dependencies": {},
-  "version": "9.01.65"
+  "version": "9.1.72"
 }

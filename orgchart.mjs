@@ -694,7 +694,7 @@ e.prototype.init = function(t, n) {
 			n._menuClickHandler.apply(n, [this, e]);
 		});
 	}
-}, e === void 0 && (e = {}), e.VERSION = "9.2.34", e.orientation = {}, e.orientation.top = 0, e.orientation.bottom = 1, e.orientation.right = 2, e.orientation.left = 3, e.orientation.top_left = 4, e.orientation.bottom_left = 5, e.orientation.right_top = 6, e.orientation.left_top = 7, e.anchor = {
+}, e === void 0 && (e = {}), e.VERSION = "9.2.36", e.orientation = {}, e.orientation.top = 0, e.orientation.bottom = 1, e.orientation.right = 2, e.orientation.left = 3, e.orientation.top_left = 4, e.orientation.bottom_left = 5, e.orientation.right_top = 6, e.orientation.left_top = 7, e.anchor = {
 	top_right: "top_right",
 	right_top: "right_top",
 	bottom_right: "bottom_right",
@@ -4984,22 +4984,6 @@ e.prototype.init = function(t, n) {
 			e.width = s, e.height = c, i.drawImage(a, 0, 0, s, c), r(e.toDataURL("image/png"));
 		}, a.onerror = i, a.src = e;
 	});
-}, e._addSelectedStyle = function(t, n, r) {
-	var i = t.getNodeElement(n.id);
-	if (i && i.classList.add("boc-selected"), n.parent) {
-		var a = t.element.querySelector(`[data-l-id="[${n.parent.id}][${n.id}]"]`);
-		a && a.classList.add("boc-selected");
-	}
-	if (r != n.id) {
-		var o = t.element.querySelector(`[data-ctrl-ec-id="${n.id}"]`);
-		o && o.classList.add("boc-selected");
-	}
-	n.rightNeighbor && n.rightNeighbor.isSplit && n.rightNeighbor.pid == n.pid && e._addSelectedStyle(t, n.rightNeighbor, r), n.leftNeighbor && n.leftNeighbor.isSplit && n.leftNeighbor.pid == n.pid && e._addSelectedStyle(t, n.leftNeighbor, r), n.parent && n.parent.isSplit && e._addSelectedStyle(t, n.parent, r);
-	var s = t.getNode(n.pid);
-	n.parent && e._addSelectedStyle(t, s, r);
-}, e._removeSelectedStyle = function(e) {
-	let t = e.element.querySelectorAll(".boc-selected");
-	for (let e = 0; e < t.length; e++) t[e].classList.remove("boc-selected");
 }, e.prototype.zoom = function(t, n, r, i) {
 	var a = this.getViewBox().slice(0), o = a, s = a[2], c = a[3];
 	t === !0 ? (a[2] /= e.SCALE_FACTOR, a[3] /= e.SCALE_FACTOR) : t === !1 ? (a[2] *= e.SCALE_FACTOR, a[3] *= e.SCALE_FACTOR) : (a[2] /= t, a[3] /= t), n ||= [50, 50], a[0] = o[0] - (a[2] - s) / (100 / n[0]), a[1] = o[1] - (a[3] - c) / (100 / n[1]);

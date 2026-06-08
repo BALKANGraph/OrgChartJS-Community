@@ -23,7 +23,7 @@ e.prototype.init = function(t, n) {
 	if (t && !this._initCalled) {
 		this._initCalled = !0, (typeof t == "string" || t instanceof String) && (t = document.querySelector(t)), this.element = t;
 		var r = this;
-		if (e._reorderNodeBinding(n), this.config = e.mergeDeep(e._defaultConfig(n), n), this._layoutConfigs = { base: {
+		if (e._reorderNodeBinding(n), this.config = e.mergeDeep(e._defaultConfig(n), n), this.config.mouseScrool && (this.config.mouseScroll = this.config.mouseScrool), this._layoutConfigs = { base: {
 			orientation: this.config.orientation,
 			levelSeparation: this.config.levelSeparation,
 			mixedHierarchyNodesSeparation: this.config.mixedHierarchyNodesSeparation,
@@ -698,7 +698,7 @@ e.prototype.init = function(t, n) {
 			n._globalContextHandler.apply(n, [this, e]);
 		}, { passive: !1 }), t.addEventListener("dblclick", function(e) {
 			n._globalDbClickHandler.apply(n, [this, e]);
-		}, { passive: !0 }), this.config.mouseScrool != e.action.none && t.addEventListener("wheel", function(e) {
+		}, { passive: !0 }), this.config.mouseScroll != e.action.none && t.addEventListener("wheel", function(e) {
 			n._mouseScrollHandler.apply(n, [this, e]);
 		}, { passive: !1 });
 		var r = this.getMenuButton();
@@ -706,7 +706,7 @@ e.prototype.init = function(t, n) {
 			n._menuClickHandler.apply(n, [this, e]);
 		});
 	}
-}, e === void 0 && (e = {}), e.VERSION = "9.3.18", e.orientation = {}, e.orientation.top = 0, e.orientation.bottom = 1, e.orientation.right = 2, e.orientation.left = 3, e.orientation.top_left = 4, e.orientation.bottom_left = 5, e.orientation.right_top = 6, e.orientation.left_top = 7, e.anchor = {
+}, e === void 0 && (e = {}), e.VERSION = "9.3.19", e.orientation = {}, e.orientation.top = 0, e.orientation.bottom = 1, e.orientation.right = 2, e.orientation.left = 3, e.orientation.top_left = 4, e.orientation.bottom_left = 5, e.orientation.right_top = 6, e.orientation.left_top = 7, e.anchor = {
 	top_right: "top_right",
 	right_top: "right_top",
 	bottom_right: "bottom_right",
@@ -1492,8 +1492,8 @@ e.prototype.init = function(t, n) {
 	t.ctrlKey && (n = !1), n ? this.__mouseScrollHandlerTreeList(i, t) : this.__mouseScrollHandler(this.getSvg(), t);
 }, e.prototype.__mouseScrollHandler = function(t, n) {
 	if (n.ctrlKey) {
-		if (this.config.mouseScrool == e.action.zoom) return;
-	} else if (this.config.mouseScrool == e.action.ctrlZoom || this.config.mouseScrool != e.action.zoom) return;
+		if (this.config.mouseScroll == e.action.zoom) return;
+	} else if (this.config.mouseScroll == e.action.ctrlZoom || this.config.mouseScroll != e.action.zoom) return;
 	if (n.preventDefault(), !navigator.hardwareConcurrency || navigator.hardwareConcurrency < 9) {
 		let i = n.deltaY / 1e3;
 		i = Math.abs(i) < .1 ? .1 * n.deltaY / Math.abs(n.deltaY) : i;
@@ -5665,7 +5665,7 @@ e.prototype.init = function(t, n) {
 		toolbar: !1,
 		nodeMouseClick: e.action.none,
 		nodeMouseDbClick: e.action.none,
-		mouseScrool: e.action.ctrlZoom,
+		mouseScroll: e.action.ctrlZoom,
 		showXScroll: !1,
 		showYScroll: !1,
 		template: "ana",

@@ -706,7 +706,7 @@ e.prototype.init = function(t, n) {
 			n._menuClickHandler.apply(n, [this, e]);
 		});
 	}
-}, e === void 0 && (e = {}), e.VERSION = "9.3.19", e.orientation = {}, e.orientation.top = 0, e.orientation.bottom = 1, e.orientation.right = 2, e.orientation.left = 3, e.orientation.top_left = 4, e.orientation.bottom_left = 5, e.orientation.right_top = 6, e.orientation.left_top = 7, e.anchor = {
+}, e === void 0 && (e = {}), e.VERSION = "9.3.20", e.orientation = {}, e.orientation.top = 0, e.orientation.bottom = 1, e.orientation.right = 2, e.orientation.left = 3, e.orientation.top_left = 4, e.orientation.bottom_left = 5, e.orientation.right_top = 6, e.orientation.left_top = 7, e.anchor = {
 	top_right: "top_right",
 	right_top: "right_top",
 	bottom_right: "bottom_right",
@@ -5593,6 +5593,77 @@ e.prototype.init = function(t, n) {
 	return this.on("ai-tool-calls", function(t, n) {
 		return e.call(t, n);
 	});
+}, e.events.on("redraw", function(t, n) {
+	for (var r = t.element.querySelectorAll("[data-n-id]"), i = 0; i < r.length; i++) r[i].addEventListener("mouseover", function(n) {
+		if (!this.contains(n.relatedTarget)) {
+			var r = this.getAttribute("data-n-id"), i = {
+				node: t.getNode(r),
+				event: n
+			};
+			if (e.events.publish("node-mouseover", [t, i]) === !1) return;
+			e._hover._addSelectedStyle(t, i.node, i.node.id, t.config.highlightOnHover);
+		}
+	}), r[i].addEventListener("mouseleave", function(n) {
+		var r = this.getAttribute("data-n-id"), i = {
+			node: t.getNode(r),
+			event: n
+		};
+		e.events.publish("node-mouseleave", [t, i]) !== !1 && e._hover._removeSelectedStyle(t);
+	});
+}), e.prototype.highlightNode = function(t, n) {
+	var r = this.getNode(t);
+	return r && e._hover._addSelectedStyle(this, r, r.id, n), this;
+}, e._hover = {}, e._hover._addSelectedStyle = function(t, n, r, i) {
+	n.isSplit || ((i == "parents" || i == "childrenAndParents") && e._hover._addSelectedStyleParents(t, n, r), (i == "children" || i == "childrenAndParents") && e._hover._addSelectedStyleChildren(t, n, r), i == "sameLevel" && e._hover._addSelectedStyleSameLevel(t, n, r), e._hover._addSelectedStyleSelf(t, n, r, i));
+}, e._hover._addSelectedStyleSelf = function(e, t, n, r) {
+	var i = e.getNodeElement(t.id);
+	i && (!i.classList.contains("boc-hover") && r == "self" && i.classList.add("boc-hover"), i.classList.add("boc-hover-self"));
+}, e._hover._addSelectedStyleChildren = function(t, n, r) {
+	var i = t.getNodeElement(n.id);
+	i && i.classList.add("boc-hover");
+	var a = t.element.querySelector(`[data-ctrl-ec-id="${n.id}"]`);
+	if (a && a.classList.add("boc-hover"), n.id != r) {
+		if (n.rightNeighbor && n.rightNeighbor.isSplit && n.rightNeighbor.pid == n.pid) {
+			var o = t.element.querySelector(`[data-l-id="[${n.parent.id}][${n.id}]"]`);
+			o && o.classList.add("boc-hover");
+		}
+		if (n.leftNeighbor && n.leftNeighbor.isSplit && n.leftNeighbor.pid == n.pid) {
+			var o = t.element.querySelector(`[data-l-id="[${n.parent.id}][${n.id}]"]`);
+			o && o.classList.add("boc-hover");
+		}
+		if (n.parent && n.parent.isSplit) {
+			var o = t.element.querySelector(`[data-l-id="[${n.parent.id}][${n.id}]"]`);
+			o && o.classList.add("boc-hover");
+		}
+	}
+	for (var s of n.children) if (s.isSplit) {
+		var o = t.element.querySelector(`[data-l-id="[${n.id}][${s.id}]"]`);
+		o && o.classList.add("boc-hover"), e._hover._addSelectedStyleChildren(t, s, r);
+	}
+	for (var c of n.childrenIds) {
+		var s = t.getNode(c), o = t.element.querySelector(`[data-l-id="[${n.id}][${s.id}]"]`);
+		o && o.classList.add("boc-hover"), e._hover._addSelectedStyleChildren(t, s, r);
+	}
+}, e._hover._addSelectedStyleSameLevel = function(e, t, n) {
+	var r = e.getNodeElement(t.id);
+	r && r.classList.add("boc-hover");
+	for (var i of e.element.querySelectorAll(`[data-l="${t.level}"]`)) i.classList.add("boc-hover");
+}, e._hover._addSelectedStyleParents = function(t, n, r) {
+	var i = t.getNodeElement(n.id);
+	if (i && i.classList.add("boc-hover"), n.parent) {
+		var a = t.element.querySelector(`[data-l-id="[${n.parent.id}][${n.id}]"]`);
+		a && a.classList.add("boc-hover");
+	}
+	if (r != n.id) {
+		var o = t.element.querySelector(`[data-ctrl-ec-id="${n.id}"]`);
+		o && o.classList.add("boc-hover");
+	}
+	n.rightNeighbor && n.rightNeighbor.isSplit && n.rightNeighbor.pid == n.pid && e._hover._addSelectedStyleParents(t, n.rightNeighbor, r), n.leftNeighbor && n.leftNeighbor.isSplit && n.leftNeighbor.pid == n.pid && e._hover._addSelectedStyleParents(t, n.leftNeighbor, r), n.parent && n.parent.isSplit && e._hover._addSelectedStyleParents(t, n.parent, r);
+	var s = t.getNode(n.pid);
+	n.parent && e._hover._addSelectedStyleParents(t, s, r);
+}, e._hover._removeSelectedStyle = function(e) {
+	let t = e.element.querySelectorAll(".boc-hover, .boc-hover-self");
+	for (let e = 0; e < t.length; e++) t[e].classList.remove("boc-hover"), t[e].classList.remove("boc-hover-self");
 }, e.prototype._dragDropHandler = function(e, t, n) {}, e.prototype._movableHandler = function(e, t, n) {}, e === void 0 && (e = {}), e._communityMessages = [], e._communityAlert = function() {
 	var t = [];
 	for (var n of e._communityMessages) t.includes(n) || t.push(n);
